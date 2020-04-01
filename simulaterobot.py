@@ -138,6 +138,17 @@ angle = math.atan2(path[1][0], path[1][1])
 t = 0
 t_i = 0
 wheels = [0,0]
+<<<<<<< HEAD
+=======
+measured_wheels = [0,0]
+lastmeasured_wheels = [0,0]
+error = [0,0]
+integral_error = [0,0]
+Ka = 0.001
+Kp = 0.90
+Kv = 1/(float(config["VELOCITY"]["MAX_VEL"]))
+Ki = 0.001
+>>>>>>> e7b8d00... simulation added
 dt = 0.005
 field = cv2.imread(config["FIELD_IMAGE"]["FILE_LOCATION"])
 img = np.zeros((field.shape[0], field.shape[1], 3), np.uint8)
@@ -160,10 +171,23 @@ while closest() != len(path) - 1:
     wheels = turn(curv, vel, width)
     print(curv)
     for i,w in enumerate(wheels):
+<<<<<<< HEAD
         wheels[i] = last_wheels[i] + min(float(config["ROBOT"]["MAX_VEL_CHANGE"])*dt, max(-float(config["ROBOT"]["MAX_VEL_CHANGE"])*dt, w-last_wheels[i]))
 
     pos = (pos[0] + (wheels[0]+wheels[1])/2*dt * math.sin(angle), pos[1] + (wheels[0]+wheels[1])/2*dt * math.cos(angle))
     angle += math.atan((wheels[0]-wheels[1])/width*dt)
+=======
+        measured_wheels[i] = Kp*(wheels[i] - lastmeasured_wheels[i]) + Kv*(wheels[i]) + Ka*(wheels[i] - last_wheels[i])/dt + Ki*integral_error[i]
+        #wheels[i] = last_wheels[i] + min(float(config["ROBOT"]["MAX_VEL_CHANGE"])*dt, max(-float(config["ROBOT"]["MAX_VEL_CHANGE"])*dt, w-last_wheels[i]))
+        if(measured_wheels[i] > float(config["VELOCITY"]["MAX_VEL"])):
+            measured_wheels[i] = config["VELOCITY"]["MAX_VEL"]
+    #pos = (pos[0] + (wheels[0]+wheels[1])/2*dt * math.sin(angle), pos[1] + (wheels[0]+wheels[1])/2*dt * math.cos(angle))
+    #angle += math.atan((wheels[0]-wheels[1])/width*dt)
+    print(measured_wheels)
+    print("Calculated velocity:" + str(wheels))
+    pos = (pos[0] + (measured_wheels[0]+measured_wheels[1])/2*dt * math.sin(angle), pos[1] + (measured_wheels[0]+measured_wheels[1])/2*dt * math.cos(angle))
+    angle += math.atan((measured_wheels[0]-measured_wheels[1])/width*dt)
+>>>>>>> e7b8d00... simulation added
     draw_robot(img)
     itr += 1
 cv2.waitKey()

@@ -144,7 +144,7 @@ lastmeasured_wheels = [0,0]
 error = [0,0]
 integral_error = [0,0]
 Ka = 0.001
-Kp = 0.20
+Kp = 0.90
 Kv = 1/(float(config["VELOCITY"]["MAX_VEL"]))
 Ki = 0.001
 dt = 0.005
@@ -182,7 +182,7 @@ while closest() != len(path) - 1:
     #pos = (pos[0] + (wheels[0]+wheels[1])/2*dt * math.sin(angle), pos[1] + (wheels[0]+wheels[1])/2*dt * math.cos(angle))
     #angle += math.atan((wheels[0]-wheels[1])/width*dt)
     print(measured_wheels)
-    print("Calculated:" + str(wheels))
+    print("Calculated velocity:" + str(wheels))
     pos = (pos[0] + (measured_wheels[0]+measured_wheels[1])/2*dt * math.sin(angle), pos[1] + (measured_wheels[0]+measured_wheels[1])/2*dt * math.cos(angle))
     angle += math.atan((measured_wheels[0]-measured_wheels[1])/width*dt)
     draw_robot(img)
